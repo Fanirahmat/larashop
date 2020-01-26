@@ -15,16 +15,23 @@
         <input type="hidden" value="PUT" name="_method">
 
         <label>Category name</label> <br>
-        <input type="text" class="form-control" value="{{$category->name}}" name="name">
+        <input type="text" class="form-control" value="{{old('name') ? old('name') : $category->name}}" name="name">
+        <div class="invalid-feedback">
+            {{$errors->first('name')}}
+        </div>
         <br><br>
+
         <label>Category image</label><br>
             @if($category->image)
                 <span>Current image</span><br>
                 <img src="{{asset('storage/'. $category->image)}}" width="120px">
                 <br><br>
             @endif
-        <input type="file" class="form-control" name="image">
+        <input type="file" class="form-control  {{$errors->first('image') ? "is-invalid" : ""}}" name="image">
         <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar</small>
+            <div class="invalid-feedback">
+                {{$errors->first('image')}}
+            </div>
         <br><br>
 
         <input type="submit" class="btn btn-primary" value="Update">

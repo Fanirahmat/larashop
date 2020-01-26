@@ -3,9 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class BookController extends Controller
 {
+    public function __construct(){
+        //OTORISASI GATE
+        $this->middleware(function($request,$next){
+            if (Gate::allows('manage-books'))
+            {   
+                return $next($request);
+            } 
+            else 
+            {
+                abort(403,'anda tidak memiliki cukup hak akses');
+            }
+        });
+    }
     
     public function index(Request $request)
     {
@@ -15,7 +29,7 @@ class BookController extends Controller
         {
             if ($keyword) 
             {
-                $books = \App\Book::with('categories')->where('status', strtoupper($filterStatus))->paginate(10);
+                $books = \App\Book::with('categories')->where('title',"LIKE","%$keyword%")->where('status', strtoupper($filterStatus))->paginate(10);
             } 
             else 
             {
@@ -24,7 +38,14 @@ class BookController extends Controller
         } 
         else 
         {
-            $books = \App\Book::with('categories')->paginate(10);
+            if ($keyword) 
+            {
+                $books = \App\Book::with('categories')->where('title',"LIKE","%$keyword%")->paginate(10);
+            } 
+            else 
+            {
+                $books = \App\Book::with('categories')->paginate(10);
+            }
         }
         return view('books.index', ['books' => $books]);
     }
@@ -38,6 +59,16 @@ class BookController extends Controller
     
     public function store(Request $request)
     {
+        \Validator::make($request->all(),[
+            "title" => "required|min:5|max:200",
+            "description" => "required|min:20|max:1000",
+            "author" => "required|min:3|max:100",
+            "publisher" => "required|min:3|max:200",
+            "price" => "required|digits_between:0,10",
+            "stock" => "required|digits_between:0,10",
+            "cover" => "required"
+        ]);
+        
         $new_book = new \App\Book;
         $new_book->title = $request->get('title');
         $new_book->description = $request->get('description');
@@ -78,6 +109,15 @@ class BookController extends Controller
     
     public function update(Request $request, $id)
     {
+        \Validator::make($request->all(), [
+            "title" => "required|min:5|max:200",
+            "description" => "required|min:20|max:1000",
+            "author" => "required|min:3|max:100",
+            "publisher" => "required|min:3|max:200",
+            "price" => "required|digits_between:0,10",
+            "stock" => "required|digits_between:0,10",
+        ])->validate();
+
         $new_book = \App\Book::findOrFail($id);
 
         $new_book->title = $request->get('title');

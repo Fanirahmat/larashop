@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md-6">
         <form action="{{route('books.index')}}">
-            <input value="{{Request::get('keyword')}}" name="keyword" class="form-control col-md-10" type="text" placeholder="Filter berdasarkan email"/>
+            <input value="{{Request::get('keyword')}}" name="keyword" class="form-control col-md-10" type="text" placeholder="Filter berdasarkan judul"/>
             <input type="submit" value="Filter" class="btn btn-primary">
         </form>
     </div>

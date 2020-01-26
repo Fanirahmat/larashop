@@ -77,8 +77,11 @@
                         <a href="/categories"><span class="oi oi-home"></span> Manage Categories</a>
                     </li> 
                     <li>
-                        <a href="/books"><span class="oi oi-home"></span> Manage Books</a>
-                    </li>                                       
+                        <a href="/books"><span class="oi oi-book"></span> Manage Books</a>
+                    </li> 
+                    <li>
+                        <a href="/orders"><span class="oi oi-inbox"></span> Manage Orders List</a>
+                    </li>                                      
                 </ul>             
                 
                 <div class="pl-3 d-none d-md-block position-fixed" style="bottom: 0px">                 
